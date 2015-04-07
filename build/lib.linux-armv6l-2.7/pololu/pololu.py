@@ -24,6 +24,29 @@
 import RPi.GPIO as gpio
 import time
 
+class Poshandler(object):
+
+    """
+        behavior depending on float or int pos parameter
+    """
+
+    def __init__(self, function):
+        self.function = function
+
+    def __call__(self, *args, **kwargs):
+        if (isinstance(args[1], float)):
+            print "angle detected"
+            args = tuple([args[0], int(args[1]/360.0 * 200)])
+        else:
+            args = tuple([args[0], int(args[1])])
+
+        return self.function(*args, **kwargs)
+
+    def __get__(self, instance, owner):
+        def wrapper(*args, **kwargs):
+            return self(instance, *args, **kwargs)
+        return wrapper
+
 class Timeunits(object):
     ms = 0.001
     us = 0.000001
@@ -94,9 +117,10 @@ class Pololu(object):
         gpio.output(self.pins.direction, gpio.HIGH)
         self.steps(n)
 
-    def goto(self, angle):
+    @Poshandler
+    def goto(self, pos):
 
-        diff = angle-self.currentangle
+        diff = pos-self.currentangle
         
         if (diff<0):
             gpio.output(self.pins.direction, gpio.LOW)
@@ -104,14 +128,14 @@ class Pololu(object):
         else:
             gpio.output(self.pins.direction, gpio.HIGH)
 
-        steps = int(diff/360.0 * 200)
+        #steps = int(diff/360.0 * 200)
+        print "Moving {0}".format(diff)
+        self.steps(int(diff))
 
-        self.steps(steps)
-
-        self.currentangle = angle
+        self.currentangle = pos
 
     def resetposition(self):
-        self.currentangle = 0.0
+        self.currentangle = 0
 
 if __name__ == "__main__":
    
@@ -122,8 +146,8 @@ if __name__ == "__main__":
     instance.stepsleft(400)
     instance.stepsright(400)
 
-    instance.goto(270)
-    instance.goto(90)
+    instance.goto(200)
+    instance.goto(100)
     instance.goto(0)
     
     print "I hope stepper is where it started..."

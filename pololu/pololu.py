@@ -34,15 +34,18 @@ class Poshandler(object):
         self.function = function
 
     def __call__(self, *args, **kwargs):
-        if (instance(args[0], float)):
-            args[0] = int(args[0]/360.0 * 200)
+        if (isinstance(args[1], float)):
+            print "angle detected"
+            args = tuple([args[0], int(args[1]/360.0 * 200)])
+        else:
+            args = tuple([args[0], int(args[1])])
+
         return self.function(*args, **kwargs)
 
     def __get__(self, instance, owner):
         def wrapper(*args, **kwargs):
-            return (self, instance, *args, **kwargs)
+            return self(instance, *args, **kwargs)
         return wrapper
-
 
 class Timeunits(object):
     ms = 0.001
@@ -126,8 +129,8 @@ class Pololu(object):
             gpio.output(self.pins.direction, gpio.HIGH)
 
         #steps = int(diff/360.0 * 200)
-
-        self.steps(steps)
+        print "Moving {0}".format(diff)
+        self.steps(int(diff))
 
         self.currentangle = pos
 
