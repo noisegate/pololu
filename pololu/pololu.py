@@ -88,7 +88,7 @@ class Pololu(object):
     def speed(self, val):
         self.rpm = val
         self.stepdelay = 60.0/self.rpm/200.0
-
+    
     def enable(self):
         gpio.output(self.pins.enable, gpio.LOW)	
 
