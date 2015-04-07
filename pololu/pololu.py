@@ -35,7 +35,6 @@ class Poshandler(object):
 
     def __call__(self, *args, **kwargs):
         if (isinstance(args[1], float)):
-            print "angle detected"
             args = tuple([args[0], int(args[1]/360.0 * 200)])
         else:
             args = tuple([args[0], int(args[1])])
@@ -128,8 +127,6 @@ class Pololu(object):
         else:
             gpio.output(self.pins.direction, gpio.HIGH)
 
-        #steps = int(diff/360.0 * 200)
-        print "Moving {0}".format(diff)
         self.steps(int(diff))
 
         self.currentangle = pos
