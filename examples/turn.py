@@ -2,11 +2,11 @@ import pololu.pololu as pololu
 
 if __name__ == '__main__':
 
-    p = pololu.Pololu(pololu.Pins(enable=22, direction=24, step=23))
+    p = pololu.Pololu(pololu.Pins(enable=22, direction=17, step=27))
 
-    p.speed = 60
-    #p.stepsleft(400)
-    #p.stepsright(400)
+    p.speed = 16
+    p.stepsleft(400)
+    p.stepsright(400)
 
     print "integer steps 200 = 360 dgs"
 

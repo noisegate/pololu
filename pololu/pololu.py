@@ -72,7 +72,6 @@ class Pololu(object):
     	gpio.setup(pins.enable,gpio.OUT)
         gpio.setup(pins.direction,gpio.OUT)
         gpio.setup(pins.step,gpio.OUT)
-
         gpio.output(pins.direction,gpio.LOW)
 
         self.currentangle = 0.0
@@ -97,7 +96,7 @@ class Pololu(object):
 
     def step(self):
         gpio.output(self.pins.step, gpio.HIGH)
-        time.sleep(Timeunits.us*1)
+        time.sleep(Timeunits.us*25)
         gpio.output(self.pins.step, gpio.LOW)
 
     def steps(self,n):
@@ -137,7 +136,8 @@ class Pololu(object):
 if __name__ == "__main__":
    
     #use your own pin defs here!
-    instance = Pololu(Pins(enable = 22, direction=24, step=23))
+    #these are th t.l.i. shield TM settings
+    instance = Pololu(Pins(enable = 25, direction=23, step=24))
     instance.speed = 60*1
 
     instance.stepsleft(400)
