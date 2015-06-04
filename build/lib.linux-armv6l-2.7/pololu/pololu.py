@@ -100,12 +100,9 @@ class Pololu(object):
         gpio.output(self.pins.step, gpio.LOW)
 
     def steps(self,n):
-        self.enable()
         for i in range(n):
             self.step()
             time.sleep(self.stepdelay)
-
-        self.disable()
 
     def stepsleft(self, n):
         gpio.output(self.pins.direction, gpio.LOW)
